@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head><title>Gemma Web Scraper</title></head>
+<body>
+<script>
+  // This is the hook the AI Edge Gallery app looks for
+  window.ai_edge_gallery_get_result = async function(dataString) {
+    try {
+      const parsedData = JSON.parse(dataString);
+      const targetUrl = parsedData.url;
+      
+      // Fetching via an open proxy to bypass mobile CORS blocks
+      const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`);
+      if (!response.ok) throw new Error("Network response failed");
+      
+      const json = await response.json();
+      const htmlContent = json.contents;
+      
+      // Turn the raw HTML string into a document we can clean up
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlContent, 'text/html');
+      
+      // Strip out scripts, styles, navbars, and footers
+      const clutter = doc.querySelectorAll('script, style, nav, footer, header');
+      clutter.forEach(el => el.remove());
+      
+      // Grab pure text and trim whitespace
+      const cleanText = doc.body.innerText.replace(/\s+/g, ' ').trim();
+      
+      // Return the first 5000 characters to Gemma
+      return JSON.stringify({ text: cleanText.substring(0, 5000) });
+    } catch (error) {
+      return JSON.stringify({ error: error.message });
+    }
+  };
+</script>
+</body>
+</html>
