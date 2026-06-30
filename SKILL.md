@@ -2,7 +2,7 @@
 name: gemma-web-scraper
 description: Fetches live content from a URL and returns the complete cleaned text directly to the model for real-time analysis.
 ---
-
+ 
 # Gemma Web Scraper
 
 Use this skill whenever a user shares a website link/URL and wants you to read, summarize, analyze, or answer questions about its content.
