@@ -2,7 +2,7 @@
 name: gemma-web-scraper
 description: Fetches live content from a URL and returns the cleaned page text directly to the model for analysis.
 ---
-
+ 
 # Gemma Web Scraper
 
 ## Purpose
